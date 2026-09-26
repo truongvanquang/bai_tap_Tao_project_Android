@@ -1,20 +1,33 @@
 package com.example.baitap_viewbinding
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+// Sửa đoạn com.example.baitap_viewbinding bên dưới thành tên package thực tế của bạn nếu cần
+import com.example.baitap_viewbinding.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    // Khai báo biến binding
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        // Khởi tạo ViewBinding (Thay thế hoàn toàn findViewById)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Bắt sự kiện nút bấm trực tiếp qua binding
+        binding.btnSubmit.setOnClickListener {
+            val inputText = binding.edtInput.text.toString().trim()
+
+            if (inputText.isNotEmpty()) {
+                // Đẩy dữ liệu lên TextView qua binding
+                binding.tvResult.text = "Bạn vừa nhập: $inputText"
+            } else {
+                Toast.makeText(this, "Vui lòng nhập dữ liệu!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
